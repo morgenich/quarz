@@ -204,6 +204,7 @@ fn print_pack_stats(stats: &quarz::pack::Stats, size: u64, started: Instant) {
             "Zeiten: lesen+auspacken {:.1} s, einsortieren {:.1} s, Rest komprimieren {:.1} s",
             stats.load_s, stats.intern_s, stats.finish_s
         );
+        println!("{}", quarz::scan::trace());
     }
     for skipped in &stats.skipped {
         println!("UEBERSPRUNGEN: {skipped}");

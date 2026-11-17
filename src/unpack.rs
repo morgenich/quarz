@@ -169,34 +169,14 @@ impl Archive {
             preflate_rs::recreate_whole_deflate_stream(plain, &corrections)
                 .map_err(|e| anyhow!("Deflate-Strom nicht wiederherstellbar: {e:?}"))
         };
+        let zlib = |plain: &[u8], settings: crate::zre::Zlib| -> Result<Vec<u8>> {
+            crate::zre::deflate(plain, settings).ok_or_else(|| anyhow!("Deflate-Strom nicht wiederherstellbar"))
+        };
         match &insert.kind {
             Kind::Deflate => recreate(&child),
-            Kind::Png { prefix, suffix, sizes } => {
-                let deflate = recreate(&child)?;
-                let mut stream = Vec::with_capacity(deflate.len() + 6);
-                stream.extend_from_slice(prefix);
-                stream.extend_from_slice(&deflate);
-                stream.extend_from_slice(suffix);
-                let mut out = Vec::with_capacity(stream.len() + 12 * sizes.len());
-                let mut at = 0usize;
-                for &(size, count) in sizes {
-                    for _ in 0..count {
-                        let chunk = stream.get(at..at + size as usize).ok_or_else(|| anyhow!("PNG-Daten passen nicht"))?;
-                        at += size as usize;
-                        let mut crc = crc32fast::Hasher::new();
-                        crc.update(b"IDAT");
-                        crc.update(chunk);
-                        out.extend_from_slice(&size.to_be_bytes());
-                        out.extend_from_slice(b"IDAT");
-                        out.extend_from_slice(chunk);
-                        out.extend_from_slice(&crc.finalize().to_be_bytes());
-                    }
-                }
-                if at != stream.len() {
-                    bail!("PNG-Daten passen nicht");
-                }
-                Ok(out)
-            }
+            Kind::DeflateZlib(settings) => zlib(&child, *settings),
+            Kind::Png { prefix, suffix, sizes } => png_chunks(prefix, &recreate(&child)?, suffix, sizes),
+            Kind::PngZlib { prefix, suffix, sizes, zlib: settings } => png_chunks(prefix, &zlib(&child, *settings)?, suffix, sizes),
             Kind::Jpeg => {
                 let mut out = Vec::with_capacity(child.len() * 5 / 4);
                 let features = lepton_jpeg::EnabledFeatures::compat_lepton_vector_read();
@@ -321,6 +301,32 @@ impl Archive {
         progress.check()?;
         Ok(failed)
     }
+}
+
+fn png_chunks(prefix: &[u8; 2], deflate: &[u8], suffix: &[u8; 4], sizes: &[(u32, u32)]) -> Result<Vec<u8>> {
+    let mut stream = Vec::with_capacity(deflate.len() + 6);
+    stream.extend_from_slice(prefix);
+    stream.extend_from_slice(deflate);
+    stream.extend_from_slice(suffix);
+    let mut out = Vec::with_capacity(stream.len() + 12 * sizes.len());
+    let mut at = 0usize;
+    for &(size, count) in sizes {
+        for _ in 0..count {
+            let chunk = stream.get(at..at + size as usize).ok_or_else(|| anyhow!("PNG-Daten passen nicht"))?;
+            at += size as usize;
+            let mut crc = crc32fast::Hasher::new();
+            crc.update(b"IDAT");
+            crc.update(chunk);
+            out.extend_from_slice(&size.to_be_bytes());
+            out.extend_from_slice(b"IDAT");
+            out.extend_from_slice(chunk);
+            out.extend_from_slice(&crc.finalize().to_be_bytes());
+        }
+    }
+    if at != stream.len() {
+        bail!("PNG-Daten passen nicht");
+    }
+    Ok(out)
 }
 
 fn check_hash(hasher: &blake3::Hasher, entry: &FileEntry) -> Result<()> {

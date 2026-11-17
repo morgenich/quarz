@@ -52,6 +52,7 @@ eframe = "0.37.0"
 rfd = "0.18.0"
 egui_extras = "0.37.0"
 winreg = "0.56.0"
+libz-sys = { version = "1.1.33", default-features = false, features = ["static"] }
 
 [target.'cfg(windows)'.dependencies]
 windows-sys = { version = "0.61", features = ["Win32_System_SystemInformation", "Win32_Storage_FileSystem", "Win32_Foundation", "Win32_System_Time", "Win32_Globalization"] }

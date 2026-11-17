@@ -12,6 +12,7 @@ pub mod recovery;
 pub mod scan;
 pub mod unpack;
 pub mod volume;
+pub mod zre;
 
 #[derive(Debug, Clone, Copy)]
 pub struct PasswordNeeded;

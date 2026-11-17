@@ -167,6 +167,7 @@ libloading 0.8.9  (ISC)
 liblzma 0.4.9  (MIT OR Apache-2.0)
 liblzma-sys 0.4.9  (MIT OR Apache-2.0)
 libm 0.2.16  (MIT)
+libz-sys 1.1.33  (MIT OR Apache-2.0)
 linebender_resource_handle 0.1.1  (Apache-2.0 OR MIT)
 litemap 0.8.3  (Unicode-3.0)
 litrs 1.0.1  (MIT OR Apache-2.0)
@@ -928,7 +929,7 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 
 ==============================================================================
-Used by: ahash 0.8.12 (LICENSE-APACHE), arrayvec 0.7.8 (LICENSE-APACHE), bitflags 2.13.2 (LICENSE-APACHE), bumpalo 3.20.4 (LICENSE-APACHE), bzip2 0.6.1 (LICENSE-APACHE), cfg-if 1.0.5 (LICENSE-APACHE), crossbeam-channel 0.5.17 (LICENSE-APACHE), crossbeam-deque 0.8.8 (LICENSE-APACHE), crossbeam-epoch 0.9.21 (LICENSE-APACHE), crossbeam-utils 0.8.23 (LICENSE-APACHE), displaydoc 0.2.7 (LICENSE-APACHE), either 1.19.0 (LICENSE-APACHE), equivalent 1.0.3 (LICENSE-APACHE), euclid 0.22.14 (LICENSE-APACHE), filetime 0.2.29 (LICENSE-APACHE), fixedbitset 0.5.9 (LICENSE-APACHE), flate2 1.1.11 (LICENSE-APACHE), fontique 0.11.1 (LICENSE-APACHE), form_urlencoded 1.2.2 (LICENSE-APACHE), glow 0.17.0 (LICENSE-APACHE), hash32 0.2.1 (LICENSE-APACHE), hashbrown 0.16.1 (LICENSE-APACHE), hashbrown 0.17.1 (LICENSE-APACHE), heapless 0.7.17 (LICENSE-APACHE), heck 0.5.0 (LICENSE-APACHE), idna 1.1.0 (LICENSE-APACHE), idna_adapter 1.2.2 (LICENSE-APACHE), indexmap 2.14.2 (LICENSE-APACHE), itertools 0.15.0 (LICENSE-APACHE), khronos-egl 6.0.0 (LICENSE-APACHE), liblzma 0.4.9 (LICENSE-APACHE), liblzma-sys 0.4.9 (LICENSE-APACHE), lock_api 0.4.14 (LICENSE-APACHE), log 0.4.35 (LICENSE-APACHE), mime 0.3.18 (LICENSE-APACHE), num-traits 0.2.19 (LICENSE-APACHE), once_cell 1.21.4 (LICENSE-APACHE), parking_lot 0.12.5 (LICENSE-APACHE), parking_lot_core 0.9.12 (LICENSE-APACHE), parlance 0.1.1 (LICENSE-APACHE), percent-encoding 2.3.2 (LICENSE-APACHE), png 0.18.1 (LICENSE-APACHE), pollster 1.0.1 (LICENSE-APACHE), postcard 1.1.3 (LICENSE-APACHE), rayon 1.12.0 (LICENSE-APACHE), rayon-core 1.13.0 (LICENSE-APACHE), regex 1.13.1 (LICENSE-APACHE), regex-automata 0.4.18 (LICENSE-APACHE), regex-syntax 0.8.11 (LICENSE-APACHE), renderdoc-sys 1.1.0 (LICENSE-APACHE), rustc-hash 1.1.0 (LICENSE-APACHE), scopeguard 1.2.0 (LICENSE-APACHE), smallvec 1.16.5 (LICENSE-APACHE), smol_str 0.2.2 (LICENSE-APACHE), stable_deref_trait 1.2.1 (LICENSE-APACHE), syn 1.0.109 (LICENSE-APACHE), tar 0.4.46 (LICENSE-APACHE), unicase 2.10.0 (LICENSE-APACHE), unicode-properties 0.1.5 (LICENSE-APACHE), unicode-segmentation 1.13.3 (LICENSE-APACHE), unicode-width 0.2.3 (LICENSE-APACHE), url 2.5.8 (LICENSE-APACHE), uuid 1.29.2 (LICENSE-APACHE)
+Used by: ahash 0.8.12 (LICENSE-APACHE), arrayvec 0.7.8 (LICENSE-APACHE), bitflags 2.13.2 (LICENSE-APACHE), bumpalo 3.20.4 (LICENSE-APACHE), bzip2 0.6.1 (LICENSE-APACHE), cfg-if 1.0.5 (LICENSE-APACHE), crossbeam-channel 0.5.17 (LICENSE-APACHE), crossbeam-deque 0.8.8 (LICENSE-APACHE), crossbeam-epoch 0.9.21 (LICENSE-APACHE), crossbeam-utils 0.8.23 (LICENSE-APACHE), displaydoc 0.2.7 (LICENSE-APACHE), either 1.19.0 (LICENSE-APACHE), equivalent 1.0.3 (LICENSE-APACHE), euclid 0.22.14 (LICENSE-APACHE), filetime 0.2.29 (LICENSE-APACHE), fixedbitset 0.5.9 (LICENSE-APACHE), flate2 1.1.11 (LICENSE-APACHE), fontique 0.11.1 (LICENSE-APACHE), form_urlencoded 1.2.2 (LICENSE-APACHE), glow 0.17.0 (LICENSE-APACHE), hash32 0.2.1 (LICENSE-APACHE), hashbrown 0.16.1 (LICENSE-APACHE), hashbrown 0.17.1 (LICENSE-APACHE), heapless 0.7.17 (LICENSE-APACHE), heck 0.5.0 (LICENSE-APACHE), idna 1.1.0 (LICENSE-APACHE), idna_adapter 1.2.2 (LICENSE-APACHE), indexmap 2.14.2 (LICENSE-APACHE), itertools 0.15.0 (LICENSE-APACHE), khronos-egl 6.0.0 (LICENSE-APACHE), liblzma 0.4.9 (LICENSE-APACHE), liblzma-sys 0.4.9 (LICENSE-APACHE), libz-sys 1.1.33 (LICENSE-APACHE), lock_api 0.4.14 (LICENSE-APACHE), log 0.4.35 (LICENSE-APACHE), mime 0.3.18 (LICENSE-APACHE), num-traits 0.2.19 (LICENSE-APACHE), once_cell 1.21.4 (LICENSE-APACHE), parking_lot 0.12.5 (LICENSE-APACHE), parking_lot_core 0.9.12 (LICENSE-APACHE), parlance 0.1.1 (LICENSE-APACHE), percent-encoding 2.3.2 (LICENSE-APACHE), png 0.18.1 (LICENSE-APACHE), pollster 1.0.1 (LICENSE-APACHE), postcard 1.1.3 (LICENSE-APACHE), rayon 1.12.0 (LICENSE-APACHE), rayon-core 1.13.0 (LICENSE-APACHE), regex 1.13.1 (LICENSE-APACHE), regex-automata 0.4.18 (LICENSE-APACHE), regex-syntax 0.8.11 (LICENSE-APACHE), renderdoc-sys 1.1.0 (LICENSE-APACHE), rustc-hash 1.1.0 (LICENSE-APACHE), scopeguard 1.2.0 (LICENSE-APACHE), smallvec 1.16.5 (LICENSE-APACHE), smol_str 0.2.2 (LICENSE-APACHE), stable_deref_trait 1.2.1 (LICENSE-APACHE), syn 1.0.109 (LICENSE-APACHE), tar 0.4.46 (LICENSE-APACHE), unicase 2.10.0 (LICENSE-APACHE), unicode-properties 0.1.5 (LICENSE-APACHE), unicode-segmentation 1.13.3 (LICENSE-APACHE), unicode-width 0.2.3 (LICENSE-APACHE), url 2.5.8 (LICENSE-APACHE), uuid 1.29.2 (LICENSE-APACHE)
 ==============================================================================
 
 Apache License
@@ -9576,6 +9577,88 @@ have been licensed under extremely permissive terms.
 ------------------------------------------------------------------------------
 
 Copyright notices are retained in src/* files where relevant.
+
+==============================================================================
+Used by: libz-sys 1.1.33 (LICENSE-MIT)
+==============================================================================
+
+Copyright (c) 2014 Alex Crichton
+Copyright (c) 2020 Josh Triplett
+
+Permission is hereby granted, free of charge, to any
+person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the
+Software without restriction, including without
+limitation the rights to use, copy, modify, merge,
+publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software
+is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice
+shall be included in all copies or substantial portions
+of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
+ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT
+SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
+IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
+
+==============================================================================
+Used by: libz-sys 1.1.33 (src\zlib-ng\LICENSE.md)
+==============================================================================
+
+(C) 1995-2024 Jean-loup Gailly and Mark Adler
+
+This software is provided 'as-is', without any express or implied
+warranty. In no event will the authors be held liable for any damages
+arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not
+   claim that you wrote the original software. If you use this software
+   in a product, an acknowledgment in the product documentation would be
+   appreciated but is not required.
+
+2. Altered source versions must be plainly marked as such, and must not be
+   misrepresented as being the original software.
+
+3. This notice may not be removed or altered from any source distribution.
+
+==============================================================================
+Used by: libz-sys 1.1.33 (src\zlib\LICENSE)
+==============================================================================
+
+Copyright notice:
+
+ (C) 1995-2026 Jean-loup Gailly and Mark Adler
+
+  This software is provided 'as-is', without any express or implied
+  warranty.  In no event will the authors be held liable for any damages
+  arising from the use of this software.
+
+  Permission is granted to anyone to use this software for any purpose,
+  including commercial applications, and to alter it and redistribute it
+  freely, subject to the following restrictions:
+
+  1. The origin of this software must not be misrepresented; you must not
+     claim that you wrote the original software. If you use this software
+     in a product, an acknowledgment in the product documentation would be
+     appreciated but is not required.
+  2. Altered source versions must be plainly marked as such, and must not be
+     misrepresented as being the original software.
+  3. This notice may not be removed or altered from any source distribution.
+
+  Jean-loup Gailly        Mark Adler
+  jloup@gzip.org          madler@alumni.caltech.edu
 
 ==============================================================================
 Used by: linebender_resource_handle 0.1.1 (AUTHORS)

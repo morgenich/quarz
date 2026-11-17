@@ -8,6 +8,7 @@ use std::collections::HashMap;
 use std::ops::Range;
 use std::panic::{AssertUnwindSafe, catch_unwind};
 use std::sync::OnceLock;
+use std::sync::atomic::Ordering;
 
 pub const MAX_DEPTH: u32 = 4;
 const MIN_BLOB: usize = 64;
@@ -16,6 +17,14 @@ const MIN_JPEG: usize = 2048;
 const PLAIN_LIMIT: usize = 256 << 20;
 const BIG_STREAM: usize = 256 << 10;
 const SAMPLE: usize = 256 << 10;
+const QUICK_LIMIT: usize = 64 << 10;
+
+static TRACE: [std::sync::atomic::AtomicU64; 5] = [const { std::sync::atomic::AtomicU64::new(0) }; 5];
+
+pub fn trace() -> String {
+    let t: Vec<u64> = TRACE.iter().map(|a| a.load(Ordering::Relaxed)).collect();
+    format!("zlib: {} Treffer, {} Fehlversuche, {:.1} s | preflate: {} Stroeme, {:.1} s", t[0], t[1], t[2] as f64 / 1e6, t[3], t[4] as f64 / 1e6)
+}
 const PNG_SIG: &[u8] = b"\x89PNG\r\n\x1a\n";
 
 pub enum Tree {
@@ -88,7 +97,7 @@ struct Found {
 }
 
 enum What {
-    Deflate,
+    Deflate { quick: Option<u8> },
     Png { payload: Vec<u8>, sizes: Vec<(u32, u32)> },
     Jpeg,
 }
@@ -117,9 +126,9 @@ fn inflate_len(buf: &[u8], zlib: bool, waste: &mut u64) -> Option<(usize, u64)> 
     }
 }
 
-fn deflate_found(start: usize, end: usize, produced: u64) -> (usize, Option<Found>) {
+fn deflate_found(start: usize, end: usize, produced: u64, quick: Option<u8>) -> (usize, Option<Found>) {
     let keep = end - start >= MIN_STREAM && produced >= MIN_BLOB as u64;
-    (end, keep.then(|| Found { range: start..end, what: What::Deflate }))
+    (end, keep.then(|| Found { range: start..end, what: What::Deflate { quick } }))
 }
 
 fn zip_entry(data: &[u8], at: usize, waste: &mut u64) -> Located {
@@ -135,7 +144,7 @@ fn zip_entry(data: &[u8], at: usize, waste: &mut u64) -> Located {
         return None;
     }
     let (len, produced) = inflate_len(&data[start..], false, waste)?;
-    Some(deflate_found(start, start + len, produced))
+    Some(deflate_found(start, start + len, produced, None))
 }
 
 fn gzip_member(data: &[u8], at: usize, waste: &mut u64) -> Located {
@@ -167,7 +176,7 @@ fn gzip_member(data: &[u8], at: usize, waste: &mut u64) -> Located {
         return None;
     }
     let (len, produced) = inflate_len(&data[pos..], false, waste)?;
-    Some(deflate_found(pos, pos + len, produced))
+    Some(deflate_found(pos, pos + len, produced, None))
 }
 
 fn zlib_stream(data: &[u8], at: usize, waste: &mut u64) -> Located {
@@ -175,7 +184,9 @@ fn zlib_stream(data: &[u8], at: usize, waste: &mut u64) -> Located {
     if len < 6 {
         return None;
     }
-    let (_, found) = deflate_found(at + 2, at + len - 4, produced);
+    let image = at >= 4 && &data[at - 4..at] == b"IDAT";
+    let hint = (!image).then_some(data[at + 1] >> 6);
+    let (_, found) = deflate_found(at + 2, at + len - 4, produced, hint);
     Some((at + len, found))
 }
 
@@ -340,11 +351,55 @@ fn worth_it(comp_len: usize, plain: &[u8], corrections: usize, level: &Level, st
     packed / SAMPLE as f64 * plain.len() as f64 + corrections as f64 <= 0.97 * comp_len as f64
 }
 
+fn inflate_raw(comp: &[u8]) -> Option<Vec<u8>> {
+    let mut d = flate2::Decompress::new(false);
+    let mut out = Vec::with_capacity(comp.len() * 4);
+    loop {
+        if out.capacity() - out.len() < 1 << 16 {
+            out.reserve(out.len().max(1 << 16));
+        }
+        let before = (d.total_in(), d.total_out());
+        let status = d.decompress_vec(&comp[d.total_in() as usize..], &mut out, flate2::FlushDecompress::Finish);
+        match status {
+            Ok(flate2::Status::StreamEnd) => return (d.total_in() as usize == comp.len()).then_some(out),
+            Ok(_) if (d.total_in(), d.total_out()) != before && out.len() <= PLAIN_LIMIT => {}
+            _ => return None,
+        }
+    }
+}
+
 fn deflate_piece(
-    range: Range<usize>, comp: &[u8], kind: Kind, depth: u32, ctx: &Ctx,
+    range: Range<usize>, comp: &[u8], kind: Kind, quick: Option<u8>, depth: u32, ctx: &Ctx,
 ) -> Option<Piece> {
-    let (plain, corrections) = preflate(comp)?;
-    if !worth_it(comp.len(), &plain, corrections.len(), ctx.level, matches!(kind, Kind::Png { .. })) {
+    let clock = std::time::Instant::now();
+    let quick = if let (Some(hint), true) = (quick, comp.len() <= QUICK_LIMIT) {
+        inflate_raw(comp).and_then(|plain| crate::zre::find(&plain, comp, hint).map(|settings| (plain, settings)))
+    } else {
+        None
+    };
+    TRACE[if quick.is_some() { 0 } else { 1 }].fetch_add(1, Ordering::Relaxed);
+    TRACE[2].fetch_add(clock.elapsed().as_micros() as u64, Ordering::Relaxed);
+    let clock = std::time::Instant::now();
+    let preflated = if quick.is_none() { preflate(comp) } else { None };
+    if quick.is_none() {
+        TRACE[3].fetch_add(1, Ordering::Relaxed);
+        TRACE[4].fetch_add(clock.elapsed().as_micros() as u64, Ordering::Relaxed);
+    }
+    let (plain, corrections, kind) = match quick {
+        Some((plain, settings)) => {
+            let kind = match kind {
+                Kind::Png { prefix, suffix, sizes } => Kind::PngZlib { prefix, suffix, sizes, zlib: settings },
+                _ => Kind::DeflateZlib(settings),
+            };
+            (plain, Vec::new(), kind)
+        }
+        None => {
+            let (plain, corrections) = preflated?;
+            (plain, corrections, kind)
+        }
+    };
+    let standalone = matches!(kind, Kind::Png { .. } | Kind::PngZlib { .. });
+    if !worth_it(comp.len(), &plain, corrections.len(), ctx.level, standalone) {
         return None;
     }
     let child = unwrap(plain, depth + 1, ctx);
@@ -355,7 +410,7 @@ fn deflate_piece(
 fn process(data: &[u8], found: &Found, depth: u32, ctx: &Ctx) -> Option<Piece> {
     let range = found.range.clone();
     match &found.what {
-        What::Deflate => deflate_piece(range.clone(), &data[range], Kind::Deflate, depth, ctx),
+        What::Deflate { quick } => deflate_piece(range.clone(), &data[range], Kind::Deflate, *quick, depth, ctx),
         What::Png { payload, sizes } => {
             let end = payload.len() - 4;
             let kind = Kind::Png {
@@ -363,7 +418,7 @@ fn process(data: &[u8], found: &Found, depth: u32, ctx: &Ctx) -> Option<Piece> {
                 suffix: payload[end..].try_into().unwrap(),
                 sizes: sizes.clone(),
             };
-            deflate_piece(range, &payload[2..end], kind, depth, ctx)
+            deflate_piece(range, &payload[2..end], kind, None, depth, ctx)
         }
         What::Jpeg => {
             let jpeg = &data[range.clone()];

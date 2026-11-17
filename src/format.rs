@@ -52,6 +52,8 @@ pub enum Kind {
     Deflate,
     Png { prefix: [u8; 2], suffix: [u8; 4], sizes: Vec<(u32, u32)> },
     Jpeg,
+    DeflateZlib(crate::zre::Zlib),
+    PngZlib { prefix: [u8; 2], suffix: [u8; 4], sizes: Vec<(u32, u32)>, zlib: crate::zre::Zlib },
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
