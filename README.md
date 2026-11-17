@@ -166,3 +166,12 @@ cargo build --release --workspace
 ```
 
 `qz.exe`, `quarz.exe` and `quarz_shell.dll` are then in `target\release`. The pictures on this page are made with `cargo run --example shots -- <folder> en` and `python docs/make_images.py <folder>`.
+
+## License
+
+Quarz is licensed under the [**PolyForm Noncommercial License 1.0.0**](LICENSE).
+
+- ✅ **Free for noncommercial use:** personal use, hobby projects, study, research, schools, charities and public institutions may use, change and share Quarz.
+- ❌ **Commercial use needs permission:** using Quarz in a company, selling it or building it into a commercial product requires a separate license – just [get in touch](https://github.com/morgenich/quarz/issues).
+
+Quarz builds on open source components, each under its own license; they are listed in [THIRD-PARTY-LICENSES.txt](THIRD-PARTY-LICENSES.txt). This includes the UnRAR code (only for extracting RAR files) and the LGPL-licensed library `cabac`.

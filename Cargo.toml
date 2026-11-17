@@ -5,6 +5,7 @@ members = ["shell"]
 name = "quarz"
 version = "0.2.0"
 edition = "2024"
+license = "PolyForm-Noncommercial-1.0.0"
 description = "Quarz archiver: unwraps old compression, finds repeated content, then compresses"
 
 [lib]
