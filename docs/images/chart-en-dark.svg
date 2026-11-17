@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="200" viewBox="0 0 760 200" font-family="Segoe UI, system-ui, -apple-system, sans-serif" role="img" aria-label="Original: 699.5 MB, ZIP: 641.0 MB, 7z (Ultra): 534.3 MB, Quarz: 402.5 MB">
+<line x1="132" y1="4" x2="132" y2="192" stroke="#383835" stroke-width="1"/>
+<path d="M132,20.0 h474.0 a4,4 0 0 1 4,4 v14 a4,4 0 0 1 -4,4 h-474.0 z" fill="#5e5d59"/>
+<text x="118" y="36.0" text-anchor="end" font-size="15" font-weight="400" fill="#f0efec">Original</text>
+<text x="620.0" y="36.0" font-size="15" font-weight="400" fill="#f0efec">699.5 MB</text>
+<path d="M132,66.0 h434.024303073624 a4,4 0 0 1 4,4 v14 a4,4 0 0 1 -4,4 h-434.024303073624 z" fill="#5e5d59"/>
+<text x="118" y="82.0" text-anchor="end" font-size="15" font-weight="400" fill="#f0efec">ZIP</text>
+<text x="580.024303073624" y="82.0" font-size="15" font-weight="400" fill="#f0efec">641.0 MB  <tspan fill="#c3c2b7" font-weight="400">&#8722;8 %</tspan></text>
+<path d="M132,112.0 h361.1113652609006 a4,4 0 0 1 4,4 v14 a4,4 0 0 1 -4,4 h-361.1113652609006 z" fill="#5e5d59"/>
+<text x="118" y="128.0" text-anchor="end" font-size="15" font-weight="400" fill="#f0efec">7z (Ultra)</text>
+<text x="507.1113652609006" y="128.0" font-size="15" font-weight="400" fill="#f0efec">534.3 MB  <tspan fill="#c3c2b7" font-weight="400">&#8722;24 %</tspan></text>
+<path d="M132,158.0 h271.04646175839883 a4,4 0 0 1 4,4 v14 a4,4 0 0 1 -4,4 h-271.04646175839883 z" fill="#3987e5"/>
+<text x="118" y="174.0" text-anchor="end" font-size="15" font-weight="600" fill="#f0efec">Quarz</text>
+<text x="417.04646175839883" y="174.0" font-size="15" font-weight="600" fill="#f0efec">402.5 MB  <tspan fill="#c3c2b7" font-weight="400">&#8722;42 %</tspan></text>
+</svg>

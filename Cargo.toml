@@ -1,0 +1,72 @@
+[workspace]
+members = ["shell"]
+
+[package]
+name = "quarz"
+version = "0.2.0"
+edition = "2024"
+description = "Quarz archiver: unwraps old compression, finds repeated content, then compresses"
+
+[lib]
+name = "quarz"
+path = "src/lib.rs"
+
+[[bin]]
+name = "qz"
+path = "src/bin/qz.rs"
+
+[[bin]]
+name = "quarz"
+path = "src/bin/quarz.rs"
+
+[dependencies]
+aes-gcm = "0.10"
+aho-corasick = "1"
+anyhow = "1"
+argon2 = "0.5"
+rand = "0.8"
+blake3 = "1"
+clap = { version = "4", features = ["derive"] }
+crc32fast = "1"
+crossbeam-channel = "0.5"
+fastcdc = "5"
+filetime = "0.2"
+flate2 = "1"
+lepton_jpeg = "0.5.8"
+liblzma = { version = "0.4", default-features = false, features = ["static"] }
+memchr = "2"
+postcard = { version = "1", features = ["use-std"] }
+preflate-rs = "0.7.6"
+rayon = "1"
+serde = { version = "1", features = ["derive"] }
+zstd = "0.14"
+rpassword = "7.5.5"
+reed-solomon-simd = "3.1.0"
+zip = "9.6.0"
+sevenz-rust2 = "0.25.0"
+tar = "0.4.46"
+bzip2 = "0.6.1"
+unrar = "0.5.8"
+eframe = "0.37.0"
+rfd = "0.18.0"
+egui_extras = "0.37.0"
+winreg = "0.56.0"
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.61", features = ["Win32_System_SystemInformation", "Win32_Storage_FileSystem", "Win32_Foundation", "Win32_System_Time", "Win32_Globalization"] }
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 4
+debug = false
+
+[profile.dev]
+opt-level = 1
+
+[dev-dependencies]
+egui_kittest = { version = "0.37.0", features = ["wgpu", "snapshot"] }
+image = "0.25.10"
+
+[build-dependencies]
+winresource = "0.1.34"
